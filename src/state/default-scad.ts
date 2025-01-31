@@ -2,6 +2,7 @@
 
 export default `
 // Hi 朋友您好！ 这是一个眼镜的模型。
+// By KIGLAND Remi
 // 本模型是由 OpenSCAD 语言编写的。
 /*
 ## 基本形状

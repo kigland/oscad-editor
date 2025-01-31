@@ -13,20 +13,11 @@ code {
     monospace;
 }
 
-/* Primary button styling */
-.p-button.p-button-primary {
-  background-color: #ff69b4 !important; /* Pink color */
-  border-color: #ff69b4 !important;
-}
-
-.p-button.p-button-primary:hover {
-  background-color: #ff4da6 !important; /* Slightly darker pink on hover */
-  border-color: #ff4da6 !important;
-}
 
 /* Footer model generation button styling */
 .footer-model-btn {
-  background-color: #4CAF50 !important; /* Green color */
+  background-color: #4CAF50 !important;
+  /* Green color */
   border-color: #4CAF50 !important;
   border-radius: 20px !important;
   padding: 0.75rem 1.5rem !important;
@@ -35,6 +26,7 @@ code {
 }
 
 .footer-model-btn:hover {
-  background-color: #45a049 !important; /* Slightly darker green on hover */
+  background-color: #45a049 !important;
+  /* Slightly darker green on hover */
   border-color: #45a049 !important;
 }
