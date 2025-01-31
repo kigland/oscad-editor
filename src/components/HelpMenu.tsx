@@ -17,15 +17,9 @@ export default function HelpMenu({ className, style }: { className?: string, sty
           target: '_blank'
         },
         {
-          label: "openscad-playground",
-          icon: 'pi pi-github',
-          url: 'https://github.com/openscad/openscad-playground/',
-          target: '_blank'
-        },
-        {
           label: '许可证',
           icon: 'pi pi-info-circle',
-          url: 'https://github.com/openscad/openscad-playground/blob/main/LICENSE.md',
+          url: 'https://github.com/kigland/oscad-editor/blob/main/LICENSE.md',
           target: '_blank'
         },
         {
