@@ -50,7 +50,7 @@ function getClosestPredefinedOrbitIndex(theta: number, phi: number): [number, nu
 
 const originalOrbit = (([name, theta, phi]) => `${theta}rad ${phi}rad auto`)(PREDEFINED_ORBITS[0]);
 
-export default function ViewerPanel({className, style}: {className?: string, style?: CSSProperties}) {
+export default function ViewerPanel({ className, style }: { className?: string, style?: CSSProperties }) {
   const model = useContext(ModelContext);
   if (!model) throw new Error('No model');
 
@@ -62,21 +62,21 @@ export default function ViewerPanel({className, style}: {className?: string, sty
 
   const [loadedUri, setLoadedUri] = useState<string | undefined>();
 
-  const [cachedImageHash, setCachedImageHash] = useState<{hash: string, uri: string} | undefined>(undefined);
+  const [cachedImageHash, setCachedImageHash] = useState<{ hash: string, uri: string } | undefined>(undefined);
 
   const modelUri = state.output?.displayFileURL ?? state.output?.outFileURL ?? '';
   const loaded = loadedUri === modelUri;
 
   if (state?.preview) {
-    let {hash, uri} = cachedImageHash ?? {};
+    let { hash, uri } = cachedImageHash ?? {};
     if (state.preview.blurhash && hash !== state.preview.blurhash) {
       hash = state.preview.blurhash;
       uri = blurHashToImage(hash, 100, 100);
-      setCachedImageHash({hash, uri});
+      setCachedImageHash({ hash, uri });
     } else if (state.preview.thumbhash && hash !== state.preview.thumbhash) {
       hash = state.preview.thumbhash;
       uri = thumbHashToImage(hash);
-      setCachedImageHash({hash, uri});
+      setCachedImageHash({ hash, uri });
     }
   } else if (cachedImageHash) {
     setCachedImageHash(undefined);
@@ -89,10 +89,10 @@ export default function ViewerPanel({className, style}: {className?: string, sty
     if (!modelViewerRef.current) return;
 
     const uri = await modelViewerRef.current.toDataURL('image/png', 0.5);
-    const preview = {blurhash: await imageToBlurhash(uri)};
+    const preview = { blurhash: await imageToBlurhash(uri) };
     // const preview = {thumbhash: await imageToThumbhash(uri)};
     console.log(preview);
-    
+
     model?.mutate(s => s.preview = preview);
   }, [model, modelUri, setLoadedUri, modelViewerRef.current]);
 
@@ -115,7 +115,7 @@ export default function ViewerPanel({className, style}: {className?: string, sty
         if (e.detail.source === 'user-interaction') {
           const cameraOrbit = ref.current.getCameraOrbit();
           cameraOrbit.radius = otherRef.current.getCameraOrbit().radius;
-        
+
           otherRef.current.cameraOrbit = cameraOrbit.toString();
         }
       }
@@ -153,9 +153,9 @@ export default function ViewerPanel({className, style}: {className?: string, sty
         const [currentIndex, dist, radDist] = getClosestPredefinedOrbitIndex(axesOrbit.theta, axesOrbit.phi);
         const newIndex = dist < euclEps && radDist < radEps ? (currentIndex + 1) % PREDEFINED_ORBITS.length : currentIndex;
         const [name, theta, phi] = PREDEFINED_ORBITS[newIndex];
-        Object.assign(modelOrbit, {theta, phi});
+        Object.assign(modelOrbit, { theta, phi });
         const newOrbit = modelViewerRef.current.cameraOrbit = axesViewerRef.current.cameraOrbit = modelOrbit.toString();
-        toastRef.current?.show({severity: 'info', detail: `${name} view`, life: 1000,});
+        toastRef.current?.show({ severity: 'info', detail: `${name} view`, life: 1000, });
         setInteractionPrompt('none');
       }
     }
@@ -171,15 +171,15 @@ export default function ViewerPanel({className, style}: {className?: string, sty
 
   return (
     <div className={className}
-          style={{
-              display: 'flex',
-              flexDirection: 'column', 
-              position: 'relative',
-              flex: 1, 
-              width: '100%',
-              ...(style ?? {})
-          }}>
-      <Toast ref={toastRef} position='top-right'  />
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        position: 'relative',
+        flex: 1,
+        width: '100%',
+        ...(style ?? {})
+      }}>
+      <Toast ref={toastRef} position='top-right' />
       <style>
         {`
           @keyframes pulse {
@@ -190,16 +190,16 @@ export default function ViewerPanel({className, style}: {className?: string, sty
         `}
       </style>
 
-      {!loaded && cachedImageHash && 
+      {!loaded && cachedImageHash &&
         <img
-        src={cachedImageHash.uri}
-        style={{
-          animation: 'pulse 1.5s ease-in-out infinite',
-          position: 'absolute',
-          pointerEvents: 'none',
-          width: '100%',
-          height: '100%'
-        }} />
+          src={cachedImageHash.uri}
+          style={{
+            animation: 'pulse 1.5s ease-in-out infinite',
+            position: 'absolute',
+            pointerEvents: 'none',
+            width: '100%',
+            height: '100%'
+          }} />
       }
 
       <model-viewer
@@ -216,8 +216,10 @@ export default function ViewerPanel({className, style}: {className?: string, sty
         camera-orbit={originalOrbit}
         interaction-prompt={interactionPrompt}
         environment-image="./skybox-lights.jpg"
-        max-camera-orbit="auto 180deg auto"
-        min-camera-orbit="auto 0deg auto"
+        max-camera-orbit="auto 180deg 300%"
+        min-camera-orbit="auto 0deg 160%"
+        camera-target="0m 0m 0m"
+        field-of-view="90deg"
         camera-controls
         ar
         ref={modelViewerRef}
@@ -226,29 +228,29 @@ export default function ViewerPanel({className, style}: {className?: string, sty
       </model-viewer>
       {state.view.showAxes && (
         <model-viewer
-                orientation="0deg -90deg 0deg"
-                src="./axes.glb"
-                style={{
-                  position: 'absolute',
-                  bottom: 0,
-                  left: 0,
-                  zIndex: 10,
-                  height: '100px',
-                  width: '100px',
-                }}
-                loading="eager"
-                camera-orbit={originalOrbit}
-                // interpolation-decay="0"
-                environment-image="./skybox-lights.jpg"
-                max-camera-orbit="auto 180deg auto"
-                min-camera-orbit="auto 0deg auto"
-                orbit-sensitivity="5"
-                interaction-prompt="none"
-                camera-controls="false"
-                disable-zoom
-                disable-tap 
-                disable-pan
-                ref={axesViewerRef}
+          orientation="0deg -90deg 0deg"
+          src="./axes.glb"
+          style={{
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            zIndex: 10,
+            height: '100px',
+            width: '100px',
+          }}
+          loading="eager"
+          camera-orbit={originalOrbit}
+          // interpolation-decay="0"
+          environment-image="./skybox-lights.jpg"
+          max-camera-orbit="auto 180deg auto"
+          min-camera-orbit="auto 0deg auto"
+          orbit-sensitivity="5"
+          interaction-prompt="none"
+          camera-controls="false"
+          disable-zoom
+          disable-tap
+          disable-pan
+          ref={axesViewerRef}
         >
           <span slot="progress-bar"></span>
         </model-viewer>
