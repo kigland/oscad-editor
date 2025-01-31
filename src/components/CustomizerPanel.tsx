@@ -14,7 +14,7 @@ import { Button } from 'primereact/button';
 import { ColorPicker } from 'primereact/colorpicker';
 import chroma from 'chroma-js';
 
-export default function CustomizerPanel({className, style}: {className?: string, style?: CSSProperties}) {
+export default function CustomizerPanel({ className, style }: { className?: string, style?: CSSProperties }) {
 
   const model = useContext(ModelContext);
   if (!model) throw new Error('No model');
@@ -46,28 +46,30 @@ export default function CustomizerPanel({className, style}: {className?: string,
 
   return (
     <div
-        className={className}
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          maxHeight: '80vh',
-          overflow: 'scroll',
-          ...style,
-          bottom: 'unset',
-        }}>
+      className={className}
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        maxHeight: '80vh',
+        overflow: 'scroll',
+        ...style,
+        bottom: 'unset',
+      }}>
+      <div className="p-4 text-pink-300 text-sm"></div>
+
       {groups.map(([group, params]) => (
-        <Fieldset 
-            style={{
-              margin: '5px 10px 5px 10px',
-              // backgroundColor: 'transparent',
-              backgroundColor: 'rgba(255,255,255,0.4)',
-            }}
-            onCollapse={() => setTabOpen(group, false)}
-            onExpand={() => setTabOpen(group, true)}
-            collapsed={collapsedTabSet.has(group)}
-            key={group}
-            legend={group}
-            toggleable={true}>
+        <Fieldset
+          style={{
+            margin: '5px 10px 5px 10px',
+            // backgroundColor: 'transparent',
+            backgroundColor: 'rgba(255,255,255,0.4)',
+          }}
+          onCollapse={() => setTabOpen(group, false)}
+          onExpand={() => setTabOpen(group, true)}
+          collapsed={collapsedTabSet.has(group)}
+          key={group}
+          legend={group}
+          toggleable={true}>
           {params.map((param) => (
             <ParameterInput
               key={param.name}
@@ -77,9 +79,9 @@ export default function CustomizerPanel({className, style}: {className?: string,
           ))}
         </Fieldset>
       ))}
-      
+
       {/* 多材质颜色选择器 */}
-      <Fieldset 
+      {/* <Fieldset 
         style={{
           margin: '5px 10px 5px 10px',
           backgroundColor: 'rgba(255,255,255,0.4)',
@@ -147,21 +149,21 @@ export default function CustomizerPanel({className, style}: {className?: string,
             }}
           />
         </div>
-      </Fieldset>
+      </Fieldset> */}
     </div>
   );
 };
 
-function ParameterInput({param, value, className, style, handleChange}: {param: Parameter, value: any, className?: string, style?: CSSProperties, handleChange: (key: string, value: any) => void}) {
+function ParameterInput({ param, value, className, style, handleChange }: { param: Parameter, value: any, className?: string, style?: CSSProperties, handleChange: (key: string, value: any) => void }) {
   return (
-    <div 
+    <div
       style={{
         flex: 1,
         ...style,
         display: 'flex',
         flexDirection: 'column',
       }}>
-      <div 
+      <div
         style={{
           flex: 1,
           display: 'flex',
@@ -170,15 +172,15 @@ function ParameterInput({param, value, className, style, handleChange}: {param: 
           alignItems: 'center',
           justifyContent: 'space-between',
         }}>
-        <div 
+        <div
           style={{
             flex: 1,
             display: 'flex',
             flexDirection: 'column',
           }}>
-            <label><b>{param.caption || param.name}</b></label>
+          <label><b>{param.caption || param.name}</b></label>
         </div>
-        <div 
+        <div
           style={{
             display: 'flex',
             flexDirection: 'row',
@@ -187,7 +189,7 @@ function ParameterInput({param, value, className, style, handleChange}: {param: 
           }}>
           {param.type === 'number' && 'options' in param && (
             <Dropdown
-              style={{flex: 1}}
+              style={{ flex: 1 }}
               value={value || param.initial}
               options={param.options}
               onChange={(e) => handleChange(param.name, e.value)}
@@ -220,7 +222,7 @@ function ParameterInput({param, value, className, style, handleChange}: {param: 
           )}
           {param.type === 'string' && !param.options && (
             <InputText
-              style={{flex: 1}}
+              style={{ flex: 1 }}
               value={value || param.initial}
               onChange={(e) => handleChange(param.name, e.target.value)}
             />
@@ -233,7 +235,7 @@ function ParameterInput({param, value, className, style, handleChange}: {param: 
             }}>
               {param.initial.map((_, index) => (
                 <InputNumber
-                  style={{flex: 1}}
+                  style={{ flex: 1 }}
                   key={index}
                   value={value?.[index] ?? (param.initial as any)[index]}
                   min={param.min}
@@ -256,9 +258,9 @@ function ParameterInput({param, value, className, style, handleChange}: {param: 
               marginRight: '0',
               visibility: value === undefined || (JSON.stringify(value) === JSON.stringify(param.initial)) ? 'hidden' : 'visible',
             }}
-            tooltipOptions={{position: 'left'}}
+            tooltipOptions={{ position: 'left' }}
             icon='pi pi-refresh'
-            className='p-button-text'/>
+            className='p-button-text' />
         </div>
       </div>
       {!Array.isArray(param.initial) && param.type === 'number' && param.min !== undefined && (

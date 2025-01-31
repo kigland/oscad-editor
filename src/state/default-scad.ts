@@ -170,7 +170,7 @@ linear_extrude(height = 5)
 /* [基础定制] */
 
 // 眼镜颜色
-model_color = "#F00";
+model_color = "#E84193";
 // 眼镜框总宽(mm)
 glasses_width = 100;
 // 眼镜腿长(mm)

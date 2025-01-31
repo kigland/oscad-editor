@@ -30,35 +30,35 @@ export default function ExportButton({ className, style }: { className?: string,
     ] : [
       {
         data: 'glb',
-        buttonLabel: '下载 GLB (二进制 glTF)',
-        label: '下载 GLB (二进制 glTF)',
+        buttonLabel: '下载 GLB 格式',
+        label: '下载 GLB 格式',
         icon: 'pi pi-box',
         command: () => model!.setFormats(undefined, 'glb'),
       },
       {
         data: 'stl',
-        buttonLabel: '下载 STL (二进制)',
-        label: '下载 STL (二进制)',
+        buttonLabel: '下载 STL 格式',
+        label: '下载 STL 格式',
         icon: 'pi pi-box',
         command: () => model!.setFormats(undefined, 'stl'),
       },
       {
         data: 'off',
-        buttonLabel: '下载 OFF (对象文件格式)',
-        label: '下载 OFF (对象文件格式)',
+        buttonLabel: '下载 OFF 格式',
+        label: '下载 OFF 格式',
         icon: 'pi pi-box',
         command: () => model!.setFormats(undefined, 'off'),
       },
-      {
-        data: '3mf',
-        buttonLabel: '下载 3MF (多材质)',
-        label: '下载 3MF (多材质)',
-        icon: 'pi pi-box',
-        command: () => model!.setFormats(undefined, '3mf'),
-      },
-      {
-        separator: true
-      },
+      // {
+      //   data: '3mf',
+      //   buttonLabel: '下载 3MF (多材质)',
+      //   label: '下载 3MF (多材质)',
+      //   icon: 'pi pi-box',
+      //   command: () => model!.setFormats(undefined, '3mf'),
+      // },
+      // {
+      //   separator: true
+      // },
       // {
       //   label: '编辑材质' + ((state.params.extruderColors ?? []).length > 0 ? ` (${(state.params.extruderColors ?? []).length})` : ''),
       //   icon: 'pi pi-palette',
