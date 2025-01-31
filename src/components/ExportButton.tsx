@@ -59,14 +59,14 @@ export default function ExportButton({ className, style }: { className?: string,
       {
         separator: true
       },
-      {
-        label: '编辑材质' + ((state.params.extruderColors ?? []).length > 0 ? ` (${(state.params.extruderColors ?? []).length})` : ''),
-        icon: 'pi pi-palette',
-        command: () => model!.mutate(s => {
-          // 直接展开参数编辑面板的多材质部分
-          s.view.collapsedCustomizerTabs = s.view.collapsedCustomizerTabs?.filter(t => t !== '多材质') ?? [];
-        }),
-      }
+      // {
+      //   label: '编辑材质' + ((state.params.extruderColors ?? []).length > 0 ? ` (${(state.params.extruderColors ?? []).length})` : ''),
+      //   icon: 'pi pi-palette',
+      //   command: () => model!.mutate(s => {
+      //     // 直接展开参数编辑面板的多材质部分
+      //     s.view.collapsedCustomizerTabs = s.view.collapsedCustomizerTabs?.filter(t => t !== '多材质') ?? [];
+      //   }),
+      // }
     ];
 
   const exportFormat = state.is2D ? state.params.exportFormat2D : state.params.exportFormat3D;

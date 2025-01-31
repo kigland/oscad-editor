@@ -166,8 +166,10 @@ linear_extrude(height = 5)
     sketch();
 */
 
-
 /* [基础定制] */
+
+// 眼镜颜色
+model_color = "#F00";
 // 眼镜框总宽(mm)
 glasses_width = 100;
 // 眼镜腿长(mm)
@@ -247,7 +249,7 @@ module hollow_cylinder(outer_r, inner_r, height, x_pos = 0, segments = 100) {
 
 // 创建眼镜
 rotate([90, 0, 0])
-glasses_hollow_cylinders_with_nosepad(
+color(model_color) glasses_hollow_cylinders_with_nosepad(
     lens_outer_radius,
     lens_inner_radius,
     lens_height,
@@ -257,4 +259,5 @@ glasses_hollow_cylinders_with_nosepad(
     temple_offset,
     lens_segments,
     bridge_segments
-);`
+);
+`
