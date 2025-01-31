@@ -170,7 +170,7 @@ export default function ViewerPanel({ className, style }: { className?: string, 
   });
 
   return (
-    <div className={className}
+    <div className={`${className}`}
       style={{
         display: 'flex',
         flexDirection: 'column',
@@ -210,9 +210,14 @@ export default function ViewerPanel({ className, style }: { className?: string, 
           transition: 'opacity 0.5s',
           opacity: loaded ? 1 : 0,
           position: 'absolute',
-          width: '100%',
-          height: '100%',
+          width: '96%',
+          height: '96%',
           backgroundColor: '#888',
+          borderRadius: 'min(20px, 10%)',
+          overflow: 'hidden',
+          left: '2%',
+          top: '2%',
+          margin: 'auto'
         }}
         camera-orbit="0.785rad 1.1rad 200%"
         interaction-prompt={interactionPrompt}

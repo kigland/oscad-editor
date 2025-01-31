@@ -1,7 +1,7 @@
 // Portions of this file are Copyright 2021 Google LLC, and licensed under GPL2+. See COPYING.
 
 import React, { CSSProperties, useEffect, useState } from 'react';
-import {MultiLayoutComponentId, State, StatePersister} from '../state/app-state'
+import { MultiLayoutComponentId, State, StatePersister } from '../state/app-state'
 import { Model } from '../state/model';
 import EditorPanel from './EditorPanel';
 import ViewerPanel from './ViewerPanel';
@@ -12,9 +12,9 @@ import { ConfirmDialog } from 'primereact/confirmdialog';
 import CustomizerPanel from './CustomizerPanel';
 
 
-export function App({initialState, statePersister, fs}: {initialState: State, statePersister: StatePersister, fs: FS}) {
+export function App({ initialState, statePersister, fs }: { initialState: State, statePersister: StatePersister, fs: FS }) {
   const [state, setState] = useState(initialState);
-  
+
   const model = new Model(fs, state, setState, statePersister);
   useEffect(() => model.init());
 
@@ -22,10 +22,10 @@ export function App({initialState, statePersister, fs}: {initialState: State, st
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'F5') {
         event.preventDefault();
-        model.render({isPreview: true, now: true})
+        model.render({ isPreview: true, now: true })
       } else if (event.key === 'F6') {
         event.preventDefault();
-        model.render({isPreview: false, now: true})
+        model.render({ isPreview: false, now: true })
       } else if (event.key === 'F7') {
         event.preventDefault();
         model.export();
@@ -62,7 +62,7 @@ export function App({initialState, statePersister, fs}: {initialState: State, st
       const itemCount = (layout.editor ? 1 : 0) + (layout.viewer ? 1 : 0) + (layout.customizer ? 1 : 0)
       return {
         flex: 1,
-        maxWidth: Math.floor(100/itemCount) + '%',
+        maxWidth: Math.floor(100 / itemCount) + '%',
         display: (state.view.layout as any)[id] ? 'flex' : 'none'
       }
     } else {
@@ -77,23 +77,23 @@ export function App({initialState, statePersister, fs}: {initialState: State, st
     <ModelContext.Provider value={model}>
       <FSContext.Provider value={fs}>
         <div className='flex flex-column' style={{
-            flex: 1,
-          }}>
-          
+          flex: 1,
+        }}>
           <PanelSwitcher />
-    
-          <div className={mode === 'multi' ? 'flex flex-row' : 'flex flex-column'}
-              style={mode === 'multi' ? {flex: 1} : {
-                flex: 1,
-                position: 'relative'
-              }}>
+          <div className={`${mode === 'multi' ? 'flex flex-row' : 'flex flex-column'}`}
+            style={mode === 'multi' ? { flex: 1 } : {
+              flex: 1,
+              position: 'relative'
+            }}>
 
             <EditorPanel className={`
               opacity-animated
               ${layout.mode === 'single' && layout.focus !== 'editor' ? 'opacity-0' : ''}
               ${layout.mode === 'single' ? 'absolute-fill' : ''}
             `} style={getPanelStyle('editor')} />
+
             <ViewerPanel className={layout.mode === 'single' ? `absolute-fill` : ''} style={getPanelStyle('viewer')} />
+
             <CustomizerPanel className={`
               opacity-animated
               ${layout.mode === 'single' && layout.focus !== 'customizer' ? 'opacity-0' : ''}

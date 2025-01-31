@@ -46,7 +46,7 @@ export default function CustomizerPanel({ className, style }: { className?: stri
 
   return (
     <div
-      className={className}
+      className={`${className}`}
       style={{
         display: 'flex',
         flexDirection: 'column',
@@ -55,8 +55,17 @@ export default function CustomizerPanel({ className, style }: { className?: stri
         ...style,
         bottom: 'unset',
       }}>
-      <div className="p-4 text-pink-300 text-sm"></div>
-
+      <div className="px-3 pt-3 flex flex-row"
+        style={{
+          alignItems: 'center',
+          justifyContent: 'left',
+        }}>
+        <a href="https://www.kig.land" target="_blank"><img src="/logo512.png" width="50" height="50" className="mr-3 block" style={{ borderRadius: '10%' }} /></a>
+        <div className="text-pink-500 text-6xl font-bold">定制您的眼镜！</div>
+      </div>
+      <div className="px-3 py-1 text-gray-300 text-sm">生成模型，直接下载，无需建模！</div>
+      <div className="px-3 py-1 text-gray-300 text-sm">还需要调整，欢迎反馈！</div>
+      <div className="px-3 pb-4 pt-1 text-gray-400 text-sm">QQ群：903520753 ｜ 偶域 KIGLAND ( <a href="https://www.kig.land" target="_blank">www.kig.land </a>)</div>
       {groups.map(([group, params]) => (
         <Fieldset
           style={{
