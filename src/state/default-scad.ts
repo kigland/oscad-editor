@@ -180,7 +180,7 @@ lens_distance = 8;
 // 横梁宽(mm)
 bridge_width = 2;
 // 眼镜腿宽(mm)
-temple_width = 1;
+temple_width = 2;
 // 眼镜腿高(mm)
 temple_height = 4;
 // 眼镜腿位置微调
@@ -201,6 +201,8 @@ lens_size = (glasses_width - lens_distance) / 2;
 lens_outer_radius = lens_size/2;
 // 镜片内圈半径
 lens_inner_radius = lens_outer_radius - lens_height;
+
+
 module glasses_hollow_cylinders_with_nosepad(
     outer_r, 
     inner_r, 
@@ -221,12 +223,64 @@ module glasses_hollow_cylinders_with_nosepad(
         hollow_cylinder(outer_r, inner_r, height, 0, lens_segments);
     }
     
-    // 眼镜腿
+    // 贝塞尔曲线函数
+    function bezier3(t, p0, p1, p2, p3) = 
+        pow(1-t,3)*p0 + 
+        3*pow(1-t,2)*t*p1 + 
+        3*(1-t)*pow(t,2)*p2 + 
+        pow(t,3)*p3;
+
+    // 根据贝塞尔曲线生成点序列
+    function generate_bezier_points(steps) = 
+        [for (i = [0:steps])
+            bezier3(
+                i/steps,
+                [0, 0, 0],     // 起点
+                [0, temple_length*0.9, 0],    // 控制点1
+                [0, temple_length*0.9, 0],    // 控制点2
+                [0, temple_length, -15]  // 终点
+            )
+        ];
+
+    // 创建路径点
+    points = generate_bezier_points(50);
+
+    // 创建方形截面
+    module square_profile(temple_h, temple_w) {
+        translate([-0.5, -0.5, -0.5]) // 将方块的中心移到原点
+            cube([2, temple_h, temple_w]); // 1x1的正方形，厚度为0.1
+    }
+
+    // 沿贝塞尔曲线路径挤出截面
+    module bezier_extrude(temple_length, temple_h, temple_w) {
+        for (i = [0:len(points)-2]) {
+            // 计算方向向量
+            vector = points[i+1] - points[i];
+            // 计算旋转角度
+            angle_z = atan2(vector[1], vector[0]);
+            angle_y = -atan2(vector[2], sqrt(vector[0]*vector[0] + vector[1]*vector[1]));
+        
+            hull() {
+                // 在当前点放置截面
+                translate(points[i])
+                rotate([90, 0, angle_z])  // 添加90度旋转使面垂直于XY平面
+                    square_profile(temple_h, temple_w);
+            
+                // 在下一个点放置截面
+                translate(points[i+1]) {
+                rotate([90, 0, angle_z])  // 添加90度旋转使面垂直于XY平面
+                    square_profile(temple_h, temple_w);
+            }
+        }
+    }
+}   
+
     mirror_pair() {
         translate([(center_distance/2 + outer_r)*(1 + temple_offset), -temple_w/2, 0])
-        rotate([0, 90, 0])
-        cube([temple_length, temple_h, temple_w]);
-    }
+        rotate([-90, 0, 0])
+        bezier_extrude(temple_length, temple_h, temple_w);
+    }   
+    
     
     // 鼻托
     rotate([0, 90, 0])
