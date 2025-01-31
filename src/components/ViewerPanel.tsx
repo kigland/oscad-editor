@@ -170,7 +170,7 @@ export default function ViewerPanel({ className, style }: { className?: string, 
   });
 
   return (
-    <div className={`${className}`}
+    <div className={`${className} select-none`}
       style={{
         display: 'flex',
         flexDirection: 'column',

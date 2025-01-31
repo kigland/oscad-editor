@@ -2,6 +2,8 @@
 
 GLASSES 是一个基于 Web 的眼镜定制工具，让用户能够轻松地在线设计和预览自己的眼镜模型。
 
+![SCREENSHOTS](./screenshots.png)
+
 ## ✨ 特性
 
 - 🎨 实时预览：修改参数即时查看效果
