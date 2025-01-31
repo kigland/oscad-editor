@@ -42,9 +42,9 @@ export function createInitialState(state: State | null, source?: {content?: stri
       view: {
         layout: {
           mode: 'multi',
-          editor: true,
+          editor: false,
           viewer: true,
-          customizer: false,
+          customizer: true,
         } as any,
 
         color: defaultModelColor,

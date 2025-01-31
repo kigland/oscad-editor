@@ -212,14 +212,18 @@ export default function ViewerPanel({ className, style }: { className?: string, 
           position: 'absolute',
           width: '100%',
           height: '100%',
+          backgroundColor: '#888',
         }}
-        camera-orbit={originalOrbit}
+        camera-orbit="0.785rad 1.1rad 200%"
         interaction-prompt={interactionPrompt}
         environment-image="./skybox-lights.jpg"
+        exposure="1.8"
+        shadow-intensity="0.5"
+        shadow-softness="0.5"
         max-camera-orbit="auto 180deg 300%"
         min-camera-orbit="auto 0deg 160%"
         camera-target="0m 0m 0m"
-        field-of-view="90deg"
+        field-of-view="100deg"
         camera-controls
         ar
         ref={modelViewerRef}
@@ -239,8 +243,7 @@ export default function ViewerPanel({ className, style }: { className?: string, 
             width: '100px',
           }}
           loading="eager"
-          camera-orbit={originalOrbit}
-          // interpolation-decay="0"
+          camera-orbit="0.785rad 1.1rad 200%"
           environment-image="./skybox-lights.jpg"
           max-camera-orbit="auto 180deg auto"
           min-camera-orbit="auto 0deg auto"
