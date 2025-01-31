@@ -60,7 +60,7 @@ export default function CustomizerPanel({ className, style }: { className?: stri
           alignItems: 'center',
           justifyContent: 'left',
         }}>
-        <a href="https://www.kig.land" target="_blank"><img src="/logo512.png" width="50" height="50" className="mr-3 block" style={{ borderRadius: '10%' }} /></a>
+        <a href="https://www.kig.land" target="_blank"><img src="./logo512.png" width="50" height="50" className="mr-3 block" style={{ borderRadius: '10%' }} /></a>
         <div className="text-pink-500 text-6xl font-bold">定制您的眼镜！</div>
       </div>
       <div className="px-3 py-1 text-gray-300 text-sm">生成模型，直接下载，无需建模！</div>
