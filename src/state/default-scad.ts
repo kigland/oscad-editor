@@ -165,22 +165,39 @@ module sketch() {
 linear_extrude(height = 5)
     sketch();
 */
-glasses_width = 100;      // 眼镜总宽度
-temple_length = 80;       // 眼镜腿长度
-lens_distance = 8;        // 镜片间距
-bridge_width = 2;         // 鼻托宽度
-temple_width = 1;        // 眼镜腿宽度
-temple_height = 4;      // 眼镜腿高度
-temple_offset = -0.005;    // 眼镜腿位置微调
 
-lens_size = (glasses_width - lens_distance) / 2;
+
+/* [基础定制] */
+// 眼镜框总宽(mm)
+glasses_width = 100;
+// 眼镜腿长(mm)
+temple_length = 80;
+// 镜片间距(mm)
+lens_distance = 8;
+// 横梁宽(mm)
+bridge_width = 2;
+// 眼镜腿宽(mm)
+temple_width = 1;
+// 眼镜腿高(mm)
+temple_height = 4;
+// 眼镜腿位置微调
+temple_offset = -0.005;
+
+/* [高级定制] */
+// 镜片厚度(mm) [0.5:3]
 lens_height = 1;
-lens_outer_radius = lens_size/2;    // 镜片半径
-lens_inner_radius = lens_outer_radius - lens_height;  // 内圆半径
+// 镜片圆环分段数 [20:200]
 lens_segments = 100;
+// 鼻托圆柱体分段数 [20:100]
+bridge_segments = 50;
 
-
-
+/* [计算参数] */
+// 单个镜片尺寸
+lens_size = (glasses_width - lens_distance) / 2;
+// 镜片外圈半径
+lens_outer_radius = lens_size/2;
+// 镜片内圈半径
+lens_inner_radius = lens_outer_radius - lens_height;
 module glasses_hollow_cylinders_with_nosepad(
     outer_r, 
     inner_r, 

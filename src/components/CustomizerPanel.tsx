@@ -11,6 +11,8 @@ import { InputText } from 'primereact/inputtext';
 import { Fieldset } from 'primereact/fieldset';
 import { Parameter } from '../state/customizer-types.ts';
 import { Button } from 'primereact/button';
+import { ColorPicker } from 'primereact/colorpicker';
+import chroma from 'chroma-js';
 
 export default function CustomizerPanel({className, style}: {className?: string, style?: CSSProperties}) {
 
@@ -75,6 +77,77 @@ export default function CustomizerPanel({className, style}: {className?: string,
           ))}
         </Fieldset>
       ))}
+      
+      {/* 多材质颜色选择器 */}
+      <Fieldset 
+        style={{
+          margin: '5px 10px 5px 10px',
+          backgroundColor: 'rgba(255,255,255,0.4)',
+        }}
+        onCollapse={() => setTabOpen('多材质', false)}
+        onExpand={() => setTabOpen('多材质', true)}
+        collapsed={collapsedTabSet.has('多材质')}
+        legend="多材质"
+        toggleable={true}>
+        <div className="flex flex-column gap-2">
+          <div className="text-sm">
+            使用 PrusaSlicer、BambuSlicer 或 OrcaSlicer 等多材质打印机时，我们会将模型的颜色映射到最接近的挤出机颜色。
+          </div>
+          <div className="text-sm mb-2">
+            请在下方定义您的挤出机颜色。
+          </div>
+
+          {(state.params.extruderColors ?? []).map((color, index) => (
+            <div key={index} className="flex items-center gap-2">
+              <ColorPicker
+                value={chroma.valid(color) ? chroma(color).hex() : 'black'}
+                onChange={(e) => {
+                  if (e.value) {
+                    const newColors = [...(state.params.extruderColors ?? [])];
+                    newColors[index] = chroma(e.value.toString()).name();
+                    model.mutate(s => s.params.extruderColors = newColors);
+                  }
+                }}
+              />
+              <InputText
+                value={color}
+                invalid={!chroma.valid(color)}
+                onChange={(e) => {
+                  let color = e.target.value.trim();
+                  try {
+                    color = chroma(color).name();
+                  } catch (e) {
+                    // ignore
+                    console.error(e);
+                  }
+                  const newColors = [...(state.params.extruderColors ?? [])];
+                  newColors[index] = color;
+                  model.mutate(s => s.params.extruderColors = newColors);
+                }}
+              />
+              <Button
+                icon="pi pi-times"
+                text
+                onClick={() => {
+                  const newColors = [...(state.params.extruderColors ?? [])];
+                  newColors.splice(index, 1);
+                  model.mutate(s => s.params.extruderColors = newColors);
+                }}
+              />
+            </div>
+          ))}
+          
+          <Button
+            icon="pi pi-plus"
+            label="添加颜色"
+            text
+            onClick={() => {
+              const newColors = [...(state.params.extruderColors ?? []), ''];
+              model.mutate(s => s.params.extruderColors = newColors);
+            }}
+          />
+        </div>
+      </Fieldset>
     </div>
   );
 };
@@ -103,8 +176,7 @@ function ParameterInput({param, value, className, style, handleChange}: {param: 
             display: 'flex',
             flexDirection: 'column',
           }}>
-          <label><b>{param.name}</b></label>
-          <div>{param.caption}</div>
+            <label><b>{param.caption || param.name}</b></label>
         </div>
         <div 
           style={{

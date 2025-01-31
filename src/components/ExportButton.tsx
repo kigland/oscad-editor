@@ -6,75 +6,78 @@ import { MenuItem } from 'primereact/menuitem';
 
 type ExtendedMenuItem = MenuItem & { buttonLabel?: string };
 
-export default function ExportButton({className, style}: {className?: string, style?: React.CSSProperties}) {
-    const model = useContext(ModelContext);
-    if (!model) throw new Error('No model');
-    const state = model.state;
+export default function ExportButton({ className, style }: { className?: string, style?: React.CSSProperties }) {
+  const model = useContext(ModelContext);
+  if (!model) throw new Error('No model');
+  const state = model.state;
 
-    const dropdownModel: ExtendedMenuItem[] = 
-      state.is2D ? [
-        {
-          data: 'svg',
-          buttonLabel: 'SVG',
-          label: 'SVG (Simple Vector Graphics)',
-          icon: 'pi pi-download',
-          command: () => model!.setFormats('svg', undefined),
-        },
-        {
-          data: 'dxf',
-          buttonLabel: 'DXF',
-          label: 'DXF (Drawing Exchange Format)',
-          icon: 'pi pi-download',
-          command: () => model!.setFormats('dxf', undefined),
-        },
-      ] : [
-        {
-          data: 'glb',
-          buttonLabel: 'Download GLB',
-          label: 'GLB (binary glTF)',
-          icon: 'pi pi-file',
-          command: () => model!.setFormats(undefined, 'glb'),
-        },
-        {
-          data: 'stl',
-          buttonLabel: 'Download STL',
-          label: 'STL (binary)',
-          icon: 'pi pi-file',
-          command: () => model!.setFormats(undefined, 'stl'),
-        },
-        {
-          data: 'off',
-          buttonLabel: 'Download OFF',
-          label: 'OFF (Object File Format)',
-          icon: 'pi pi-file',
-          command: () => model!.setFormats(undefined, 'off'),
-        },
-        {
-          data: '3mf',
-          buttonLabel: 'Download 3MF',
-          label: '3MF (Multimaterial)',
-          icon: 'pi pi-file',
-          command: () => model!.setFormats(undefined, '3mf'),
-        },
-        {
-          separator: true
-        },
-        {
-          label: 'Edit materials' + ((state.params.extruderColors ?? []).length > 0 ? ` (${(state.params.extruderColors ?? []).length})` : ''),
-          icon: 'pi pi-cog',
-          command: () => model!.mutate(s => s.view.extruderPickerVisibility = 'editing'),
-        }
-      ];
+  const dropdownModel: ExtendedMenuItem[] =
+    state.is2D ? [
+      {
+        data: 'svg',
+        buttonLabel: 'SVG (矢量图形)',
+        label: 'SVG (矢量图形)',
+        icon: 'pi pi-image',
+        command: () => model!.setFormats('svg', undefined),
+      },
+      {
+        data: 'dxf',
+        buttonLabel: 'DXF (绘图交换格式)',
+        label: 'DXF (绘图交换格式)',
+        icon: 'pi pi-image',
+        command: () => model!.setFormats('dxf', undefined),
+      },
+    ] : [
+      {
+        data: 'glb',
+        buttonLabel: '下载 GLB (二进制 glTF)',
+        label: '下载 GLB (二进制 glTF)',
+        icon: 'pi pi-box',
+        command: () => model!.setFormats(undefined, 'glb'),
+      },
+      {
+        data: 'stl',
+        buttonLabel: '下载 STL (二进制)',
+        label: '下载 STL (二进制)',
+        icon: 'pi pi-box',
+        command: () => model!.setFormats(undefined, 'stl'),
+      },
+      {
+        data: 'off',
+        buttonLabel: '下载 OFF (对象文件格式)',
+        label: '下载 OFF (对象文件格式)',
+        icon: 'pi pi-box',
+        command: () => model!.setFormats(undefined, 'off'),
+      },
+      {
+        data: '3mf',
+        buttonLabel: '下载 3MF (多材质)',
+        label: '下载 3MF (多材质)',
+        icon: 'pi pi-box',
+        command: () => model!.setFormats(undefined, '3mf'),
+      },
+      {
+        separator: true
+      },
+      {
+        label: '编辑材质' + ((state.params.extruderColors ?? []).length > 0 ? ` (${(state.params.extruderColors ?? []).length})` : ''),
+        icon: 'pi pi-palette',
+        command: () => model!.mutate(s => {
+          // 直接展开参数编辑面板的多材质部分
+          s.view.collapsedCustomizerTabs = s.view.collapsedCustomizerTabs?.filter(t => t !== '多材质') ?? [];
+        }),
+      }
+    ];
 
-    const exportFormat = state.is2D ? state.params.exportFormat2D : state.params.exportFormat3D;
-    const selectedItem = dropdownModel.filter(item => item.data === exportFormat)[0] || dropdownModel[0]!;
+  const exportFormat = state.is2D ? state.params.exportFormat2D : state.params.exportFormat3D;
+  const selectedItem = dropdownModel.filter(item => item.data === exportFormat)[0] || dropdownModel[0]!;
 
   return (
     <div className={className} style={style}>
-      <SplitButton 
+      <SplitButton
         label={selectedItem.buttonLabel}
         disabled={!state.output || state.output.isPreview || state.rendering || state.exporting}
-        icon="pi pi-download" 
+        icon="pi pi-download"
         model={dropdownModel}
         severity="secondary"
         onClick={e => model!.export()}

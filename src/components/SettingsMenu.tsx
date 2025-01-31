@@ -19,8 +19,8 @@ export default function SettingsMenu({className, style}: {className?: string, st
       <Menu model={[
         {
           label: state.view.layout.mode === 'multi'
-            ? 'Switch to single panel mode'
-            : "Switch to side-by-side mode",
+            ? '切换到单面板模式'
+            : "切换到多面板模式",
           icon: 'pi pi-table',
           // disabled: true,
           command: () => model.changeLayout(state.view.layout.mode === 'multi' ? 'single' : 'multi'),
@@ -29,45 +29,43 @@ export default function SettingsMenu({className, style}: {className?: string, st
           separator: true
         },  
         {
-          label: state.view.showAxes ? 'Hide axes' : 'Show axes',
+          label: state.view.showAxes ? '隐藏坐标轴' : '显示坐标轴',
           icon: 'pi pi-asterisk',
           // disabled: true,
-          command: () => model.mutate(s => s.view.showAxes = !s.view.showAxes)
+          command: () => model.mutate(s => s.view.showAxes = !s.view.showAxes),
         },
         {
-          label: state.view.lineNumbers ? 'Hide line numbers' : 'Show line numbers',
+          label: state.view.lineNumbers ? '隐藏行号' : '显示行号',
           icon: 'pi pi-list',
-          // disabled: true,
-          command: () => model.mutate(s => s.view.lineNumbers = !s.view.lineNumbers)
+          command: () => model.mutate(s => s.view.lineNumbers = !s.view.lineNumbers),
         },
         ...(isInStandaloneMode() ? [
           {
             separator: true
           },  
           {
-            label: 'Clear local storage',
-            icon: 'pi pi-list',
+            label: '清除本地存储',
+            icon: 'pi pi-trash',
             // disabled: true,
             command: () => {
               confirmDialog({
-                message: "This will clear all the edits you've made and files you've created in this playground " +
-                  "and will reset it to factory defaults. " +
-                  "Are you sure you wish to proceed? (you might lose your models!)",
-                header: 'Clear local storage',
+                message: "这将清除您在此播放器中所做的所有编辑和创建的文件，并将其重置为出厂默认值。 " +
+                  "您确定要继续吗？（您可能会丢失模型！）",
+                header: '清除本地存储',
                 icon: 'pi pi-exclamation-triangle',
                 accept: () => {
                   localStorage.clear();
                   location.reload();
                 },
-                acceptLabel: `Clear all files!`,
-                rejectLabel: 'Cancel'
+                acceptLabel: `清除所有文件！`,
+                rejectLabel: '取消'
               });
             },
           },
         ] : []),
       ] as MenuItem[]} popup ref={settingsMenu} />
     
-      <Button title="Settings menu"
+      <Button title="设置菜单"
           style={style}
           className={className}
           rounded

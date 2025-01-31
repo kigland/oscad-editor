@@ -49,28 +49,106 @@ export default function EditorPanel({className, style}: {className?: string, sty
   const onMount = (editor: monaco.editor.IStandaloneCodeEditor) => {
     editor.addAction({
       id: "openscad-render",
-      label: "Render OpenSCAD",
+      label: "渲染 OpenSCAD",
       run: () => model.render({isPreview: false, now: true})
     });
     editor.addAction({
       id: "openscad-preview",
-      label: "Preview OpenSCAD",
+      label: "预览 OpenSCAD",
       run: () => model.render({isPreview: true, now: true})
     });
     editor.addAction({
       id: "openscad-save-do-nothing",
-      label: "Save (disabled)",
+      label: "保存 (disabled)",
       keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS],
       run: () => {}
     });
     editor.addAction({
       id: "openscad-save-project",
-      label: "Save OpenSCAD project",
+      label: "保存 OpenSCAD 项目",
       keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyMod.Shift | monaco.KeyCode.KeyS],
       run: () => model.saveProject()
     });
     setEditor(editor)
   }
+
+  const items: MenuItem[] = [
+    {
+      icon: 'pi pi-refresh',
+      label: "渲染 OpenSCAD",
+      command: () => model.render({isPreview: false, now: true}),
+    },
+    {
+      icon: 'pi pi-eye',
+      label: "预览 OpenSCAD",
+      command: () => model.render({isPreview: true, now: true}),
+    },
+    {
+      icon: 'pi pi-save',
+      label: "保存",
+      disabled: !state.params.sources.some(s => s.content !== s.savedContent),
+      command: () => model.save(),
+    },
+    {
+      icon: 'pi pi-save',
+      label: "保存 OpenSCAD 项目",
+      command: () => model.export(),
+    },
+  ];
+
+  const fileMenu: MenuItem[] = [
+    {
+      icon: 'pi pi-file',
+      items: [
+        {
+          label: "新建项目",
+          icon: 'pi pi-plus',
+          command: () => model.newProject(),
+        },
+        {
+          label: '分享项目',
+          icon: 'pi pi-share-alt',
+          command: () => model.share(),
+        },
+        { separator: true },
+        {
+          label: "新建文件",
+          icon: 'pi pi-file',
+          command: () => model.newFile(),
+        },
+        {
+          label: "复制到新文件",
+          icon: 'pi pi-copy',
+          command: () => model.copyToNewFile(),
+        },
+        {
+          label: "上传文件",
+          icon: 'pi pi-upload',
+          command: () => model.uploadFile(),
+        },
+        {
+          label: '下载源文件',
+          icon: 'pi pi-download',
+          command: () => model.downloadSources(),
+        },
+      ]
+    },
+    {
+      icon: 'pi pi-pencil',
+      items: [
+        {
+          label: '全选',
+          icon: 'pi pi-check-square',
+          command: () => editor?.getAction('editor.action.selectAll')?.run(),
+        },
+        {
+          label: '查找',
+          icon: 'pi pi-search',
+          command: () => editor?.getAction('actions.find')?.run(),
+        }
+      ]
+    },
+  ];
 
   return (
     <div className={`editor-panel ${className ?? ''}`} style={{
@@ -85,65 +163,8 @@ export default function EditorPanel({className, style}: {className?: string, sty
         margin: '5px',
       }}>
           
-        <Menu model={[
-          {
-            label: "New project",
-            icon: 'pi pi-plus-circle',
-            command: () => window.open(buildUrlForStateParams(getBlankProjectState()), '_blank'),
-            target: '_blank',
-          },
-          {
-            // TODO: share text, title and rendering image
-            // https://developer.mozilla.org/en-US/docs/Web/API/Navigator/share
-            label: 'Share project',
-            icon: 'pi pi-share-alt',
-            disabled: true,
-          },
-          {
-            separator: true
-          },  
-          {
-            // TODO: popup to ask for file name
-            label: "New file",
-            icon: 'pi pi-plus',
-            disabled: true,
-          },
-          {
-            label: "Copy to new file",
-            icon: 'pi pi-clone',
-            disabled: true,
-          },
-          {
-            label: "Upload file(s)",
-            icon: 'pi pi-upload',
-            disabled: true,
-          },
-          {
-            label: 'Download sources',
-            icon: 'pi pi-download',
-            disabled: true,
-          },
-          {
-            separator: true
-          },
-          {
-            separator: true
-          },
-          {
-            label: 'Select All',
-            icon: 'pi pi-info-circle',
-            command: () => editor?.trigger(state.params.activePath, 'editor.action.selectAll', null),
-          },
-          {
-            separator: true
-          },
-          {
-            label: 'Find',
-            icon: 'pi pi-search',
-            command: () => editor?.trigger(state.params.activePath, 'actions.find', null),
-          },
-        ] as MenuItem[]} popup ref={menu} />
-        <Button title="Editor menu" rounded text icon="pi pi-ellipsis-h" onClick={(e) => menu.current && menu.current.toggle(e)} />
+        <Menu model={fileMenu} popup ref={menu} />
+        <Button title="编辑器菜单" rounded text icon="pi pi-ellipsis-h" onClick={(e) => menu.current && menu.current.toggle(e)} />
         
         <FilePicker 
             style={{
@@ -154,7 +175,7 @@ export default function EditorPanel({className, style}: {className?: string, sty
           <Button icon="pi pi-chevron-left" 
           text
           onClick={() => model.openFile(defaultSourcePath)} 
-          title={`Go back to ${defaultSourcePath}`}/>}
+          title={`返回 ${defaultSourcePath}`}/>}
 
       </div>
 
